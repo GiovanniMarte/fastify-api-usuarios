@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
-import getUsersHandler from '../controllers/userController';
+import createUserHandler from '../controllers/userController';
 
 const userRoute = async (server: FastifyInstance) => {
-  server.get('/', getUsersHandler);
+  server.get('/:password', createUserHandler);
 };
 
 export default userRoute;

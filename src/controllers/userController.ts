@@ -1,12 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { verifyPassword, hashPassword } from '../utils/hash';
 
-const getUsersHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-  return [
-    {
-      name: 'Giova',
-      age: 23,
-    },
-  ];
+const createUserHandler = async (
+  request: FastifyRequest<{ Params: { password: string } }>,
+  reply: FastifyReply
+) => {
+  const hashedPassword = await hashPassword('giovamixz');
+  const result = await verifyPassword(request.params.password, hashedPassword);
+  reply.header('hello', 123);
+  return { result };
 };
 
-export default getUsersHandler;
+export default createUserHandler;

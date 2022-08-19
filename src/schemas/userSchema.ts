@@ -1,9 +1,21 @@
 import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+
+const UserBase = {
+  name: z.string(),
+  email: z.string().email(),
+};
 
 const User = z.object({
-  email: z.string().email(),
-  name: z.string(),
+  ...UserBase,
   password: z.string(),
 });
+
+const UserDTO = z.object({
+  id: z.string(),
+  ...UserBase,
+});
+
+export const { schemas, $ref } = buildJsonSchemas({ User, UserDTO });
 
 export type UserInput = z.infer<typeof User>;

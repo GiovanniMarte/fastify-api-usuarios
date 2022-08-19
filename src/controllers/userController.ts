@@ -1,14 +1,18 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { verifyPassword, hashPassword } from '../utils/hash';
+import createUser from '../services/userService';
+import { UserInput } from '../schemas/userSchema';
 
 const createUserHandler = async (
-  request: FastifyRequest<{ Params: { password: string } }>,
+  request: FastifyRequest<{ Body: UserInput }>,
   reply: FastifyReply
 ) => {
-  const hashedPassword = await hashPassword('giovamixz');
-  const result = await verifyPassword(request.params.password, hashedPassword);
-  reply.header('hello', 123);
-  return { result };
+  try {
+    const user = await createUser(request.body);
+    return reply.code(201).send(user);
+  } catch (err) {
+    console.error(err);
+    return reply.code(500).send(err);
+  }
 };
 
 export default createUserHandler;

@@ -29,9 +29,13 @@ const userRoute = async (server: FastifyInstance) => {
     authUserHandler
   );
 
-  server.get('/', findUsersHandler);
+  server.get('/', { onRequest: [server.authenticate] }, findUsersHandler);
 
-  server.delete('/:id', { schema: { response: { 200: $ref('UserResponse') } } }, deleteUserHandler);
+  server.delete(
+    '/:id',
+    { schema: { response: { 200: $ref('UserResponse') } }, onRequest: [server.authenticate] },
+    deleteUserHandler
+  );
 };
 
 export default userRoute;

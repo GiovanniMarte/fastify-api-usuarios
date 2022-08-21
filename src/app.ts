@@ -1,14 +1,12 @@
 import Fastify from 'fastify';
+import fastifyJwt from '@fastify/jwt';
 import userRoute from './routes/userRoute';
-import { schemas } from './schemas/userSchema';
 
-const server = Fastify({ logger: true });
+export const server = Fastify({ logger: true });
 
-async function main() {
-  for (const schema of schemas) {
-    server.addSchema(schema);
-  }
-
+async function start() {
+  server.register(fastifyJwt, { secret: 'supersecret' });
+  server.decorate('authenticate', () => {});
   server.register(userRoute, { prefix: 'api/user' });
 
   try {
@@ -19,4 +17,4 @@ async function main() {
   }
 }
 
-main();
+start();

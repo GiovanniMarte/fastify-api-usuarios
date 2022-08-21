@@ -1,8 +1,8 @@
 import prisma from '../utils/prisma';
-import type { UserInput } from '../schemas/userSchema';
+import type { UserType } from '../schemas/userSchema';
 import { hashPassword } from '../utils/hash';
 
-const createUser = async (input: UserInput) => {
+export const registerUser = async (input: UserType) => {
   const { password, ...rest } = input;
 
   const hashedPassword = await hashPassword(password);
@@ -17,4 +17,17 @@ const createUser = async (input: UserInput) => {
   return user;
 };
 
-export default createUser;
+export const findUserByEmail = async (email: string) => {
+  const user = prisma.user.findUnique({ where: { email: email } });
+  return user;
+};
+
+export const findUsers = async () => {
+  const users = prisma.user.findMany({ select: { id: true, email: true, name: true } });
+  return users;
+};
+
+export const deleteUser = async (id: number) => {
+  const deletedUser = prisma.user.delete({ where: { id: id } });
+  return deletedUser;
+};

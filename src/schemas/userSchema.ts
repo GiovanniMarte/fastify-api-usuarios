@@ -11,11 +11,27 @@ const User = z.object({
   password: z.string(),
 });
 
-const UserDTO = z.object({
-  id: z.string(),
+const UserResponse = z.object({
+  id: z.number(),
   ...UserBase,
 });
 
-export const { schemas, $ref } = buildJsonSchemas({ User, UserDTO });
+const Login = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
-export type UserInput = z.infer<typeof User>;
+const LoginResponse = z.object({
+  accessToken: z.string(),
+});
+
+export type UserType = z.infer<typeof User>;
+
+export type LoginType = z.infer<typeof Login>;
+
+export const { schemas: userSchemas, $ref } = buildJsonSchemas({
+  User,
+  UserResponse,
+  Login,
+  LoginResponse,
+});

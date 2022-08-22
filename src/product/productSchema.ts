@@ -1,6 +1,6 @@
 import { buildJsonSchemas } from 'fastify-zod';
 import { z } from 'zod';
-import { UserResponse } from './userSchema';
+import { UserResponse } from '../user/userSchema';
 
 const ProductInput = z.object({
   title: z.string(),

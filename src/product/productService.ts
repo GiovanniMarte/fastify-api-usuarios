@@ -1,4 +1,4 @@
-import { ProductInput } from '../schemas/productSchema';
+import { ProductInput } from './productSchema';
 import prisma from '../utils/prisma';
 
 const options = {

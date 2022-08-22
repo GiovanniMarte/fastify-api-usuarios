@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { createProductHandler, findAllProductsHandler } from '../controllers/productController';
-import { $ref, productSchemas } from '../schemas/productSchema';
+import { createProductHandler, findAllProductsHandler } from './productController';
+import { $ref, productSchemas } from './productSchema';
 
 const productRoute = async (server: FastifyInstance) => {
   for (const schema of productSchemas) {

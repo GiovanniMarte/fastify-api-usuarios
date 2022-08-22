@@ -4,8 +4,8 @@ import {
   registerUserHandler,
   deleteUserHandler,
   authUserHandler,
-} from '../controllers/userController';
-import { userSchemas, $ref } from '../schemas/userSchema';
+} from './userController';
+import { userSchemas, $ref } from './userSchema';
 
 const userRoute = async (server: FastifyInstance) => {
   for (const schema of userSchemas) {

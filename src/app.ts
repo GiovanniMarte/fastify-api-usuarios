@@ -1,8 +1,8 @@
 import Fastify from 'fastify';
 import fastifyJwt from '@fastify/jwt';
-import userRoute from './routes/userRoute';
+import userRoute from './user/userRoute';
 import { authDecorator } from './decorators/authDecorator';
-import productRoute from './routes/productRoute';
+import productRoute from './product/productRoute';
 import fastifySwagger from '@fastify/swagger';
 import { withRefResolver } from 'fastify-zod';
 import { SWAGGER_CONFIG } from './utils/swaggerConfig';

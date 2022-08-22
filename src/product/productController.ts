@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { ProductInput } from '../schemas/productSchema';
-import { createProduct, findAllProducts } from '../services/productService';
+import { ProductInput } from './productSchema';
+import { createProduct, findAllProducts } from './productService';
 
 export const findAllProductsHandler = async (request: FastifyRequest, reply: FastifyReply) => {
   try {

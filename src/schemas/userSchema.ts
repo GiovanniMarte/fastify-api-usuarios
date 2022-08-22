@@ -11,7 +11,7 @@ const User = z.object({
   password: z.string(),
 });
 
-const UserResponse = z.object({
+export const UserResponse = z.object({
   id: z.number(),
   ...UserBase,
 });

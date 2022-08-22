@@ -22,12 +22,15 @@ export const findUserByEmail = async (email: string) => {
   return user;
 };
 
-export const findUsers = async () => {
+export const findAllUsers = async () => {
   const users = prisma.user.findMany({ select: { id: true, email: true, name: true } });
   return users;
 };
 
 export const deleteUser = async (id: number) => {
-  const deletedUser = prisma.user.delete({ where: { id: id } });
+  const deletedUser = prisma.user.delete({
+    where: { id: id },
+    select: { id: true, email: true, name: true },
+  });
   return deletedUser;
 };

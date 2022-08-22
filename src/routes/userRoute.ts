@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import {
-  findUsersHandler,
+  findAllUsersHandler,
   registerUserHandler,
   deleteUserHandler,
   authUserHandler,
@@ -29,7 +29,7 @@ const userRoute = async (server: FastifyInstance) => {
     authUserHandler
   );
 
-  server.get('/', { onRequest: [server.authenticate] }, findUsersHandler);
+  server.get('/', { onRequest: [server.authenticate] }, findAllUsersHandler);
 
   server.delete(
     '/:id',

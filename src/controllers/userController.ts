@@ -25,7 +25,7 @@ export const authUserHandler = async (
 
     const user = await findUserByEmail(email);
 
-    if (!user) return reply.code(404).send({ status: 404, error: 'User not found' });
+    if (!user) return reply.code(401).send({ status: 401, error: 'User not found' });
 
     const isMatch = await verifyPassword(password, user.password);
 

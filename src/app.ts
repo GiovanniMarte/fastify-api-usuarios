@@ -1,30 +1,14 @@
-import Fastify from 'fastify';
-import fastifyJwt from '@fastify/jwt';
-import userRoute from './user/userRoute';
-import { authDecorator } from './decorators/authDecorator';
-import productRoute from './product/productRoute';
-import fastifySwagger from '@fastify/swagger';
-import { withRefResolver } from 'fastify-zod';
-import { SWAGGER_CONFIG } from './utils/swaggerConfig';
+import buildServer from './server';
 
-const server = Fastify({ logger: true });
+const server = buildServer();
 
-async function start() {
-  server.register(fastifyJwt, { secret: 'supersecret' });
-
-  server.decorate('authenticate', authDecorator);
-
-  server.register(fastifySwagger, withRefResolver(SWAGGER_CONFIG));
-
-  server.register(userRoute, { prefix: 'api/user' });
-  server.register(productRoute, { prefix: 'api/product' });
-
+const start = async () => {
   try {
     await server.listen({ port: 3000, host: '::' });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
   }
-}
+};
 
 start();

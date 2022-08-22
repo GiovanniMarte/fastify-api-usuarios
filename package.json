@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "src/app.ts",
   "license": "MIT",
-  "types": "index.ts",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts"
   },

@@ -4,7 +4,9 @@
   "main": "src/app.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts"
+    "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
+    "build": "tsc",
+    "start": "node dist/src/app.js"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

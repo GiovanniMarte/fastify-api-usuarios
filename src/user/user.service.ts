@@ -1,5 +1,5 @@
 import prisma from '../utils/prisma';
-import type { UserType } from './userSchema';
+import type { UserType } from './user.schema';
 import { hashPassword } from '../utils/hash';
 
 export const registerUser = async (input: UserType) => {

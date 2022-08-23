@@ -1,6 +1,6 @@
-import buildServer from './server';
+import build from './server';
 
-const server = buildServer();
+const server = build();
 
 const start = async () => {
   try {

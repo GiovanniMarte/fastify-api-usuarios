@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { findAllUsers, registerUser, deleteUser, findUserByEmail } from './userService';
-import { LoginType, UserType } from './userSchema';
+import { findAllUsers, registerUser, deleteUser, findUserByEmail } from './user.service';
+import { LoginType, UserType } from './user.schema';
 import { verifyPassword } from '../utils/hash';
 
 export const registerUserHandler = async (

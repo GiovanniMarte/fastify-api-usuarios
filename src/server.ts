@@ -1,14 +1,14 @@
-import Fastify from 'fastify';
+import fastify from 'fastify';
 import fastifyJwt from '@fastify/jwt';
-import userRoute from './user/userRoute';
-import { authDecorator } from './decorators/authDecorator';
-import productRoute from './product/productRoute';
+import userRoute from './user/user.route';
+import { authDecorator } from './decorators/auth.decorator';
+import productRoute from './product/product.route';
 import fastifySwagger from '@fastify/swagger';
 import { withRefResolver } from 'fastify-zod';
-import { SWAGGER_CONFIG } from './utils/swaggerConfig';
+import { SWAGGER_CONFIG } from './utils/swagger.config';
 
-const buildServer = () => {
-  const server = Fastify({ logger: true });
+const build = () => {
+  const server = fastify({ logger: true });
 
   server.register(fastifyJwt, { secret: 'supersecret' });
 
@@ -23,4 +23,4 @@ const buildServer = () => {
   return server;
 };
 
-export default buildServer;
+export default build;

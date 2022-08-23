@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { findAllUsers, registerUser, deleteUser, findUserByEmail } from './user.service';
+import { findAllUsers, createUser, deleteUser, findUserByEmail } from './user.service';
 import { LoginType, UserType } from './user.schema';
 import { verifyPassword } from '../utils/hash';
 
@@ -8,7 +8,7 @@ export const registerUserHandler = async (
   reply: FastifyReply
 ) => {
   try {
-    const user = await registerUser(request.body);
+    const user = await createUser(request.body);
     return reply.code(201).send(user);
   } catch (err) {
     console.error(err);
@@ -33,7 +33,7 @@ export const authUserHandler = async (
 
     const jwt = await reply.jwtSign({ id: user.id, name: user.name });
 
-    return reply.code(200).send({ accessToken: jwt });
+    return reply.code(201).send({ accessToken: jwt });
   } catch (err) {
     return reply.code(400).send(err);
   }

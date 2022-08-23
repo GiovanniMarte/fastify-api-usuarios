@@ -20,6 +20,10 @@ const build = () => {
 
   server.register(productRoute, { prefix: 'api/product' });
 
+  server.get('/healthcheck', async () => {
+    return { status: 'OK' };
+  });
+
   return server;
 };
 

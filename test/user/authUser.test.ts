@@ -1,8 +1,8 @@
 import { test } from 'tap';
 import build from '../../src/server';
 import prisma from '../../src/utils/prisma';
-import { createFakeUserInput } from '../../src/utils/fakeData';
-import { LoginResponse } from '../../src/user/user.schema';
+import { createFakeUser, FakeUser } from '../../src/utils/fakeData';
+import { FastifyInstance } from 'fastify';
 
 interface ValidJWT {
   id: string;
@@ -13,30 +13,14 @@ interface ValidJWT {
 test('should authenticate user and return verified jwt', async t => {
   const server = build();
 
-  const user = createFakeUserInput();
+  const { statusCode, headers, user, jwt } = await createAndAuthenticateUser(server);
 
-  await server.inject({
-    method: 'POST',
-    url: '/api/user/register',
-    payload: user,
-  });
+  t.equal(statusCode, 200);
+  t.equal(headers['content-type'], 'application/json; charset=utf-8');
 
-  const response = await server.inject({
-    method: 'POST',
-    url: '/api/user/auth',
-    payload: { email: user.email, password: user.password },
-  });
-
-  const data = LoginResponse.parse(response.json());
-
-  const jwt = server.jwt.verify<ValidJWT>(data.accessToken);
-
-  t.equal(response.statusCode, 200);
-  t.equal(response.headers['content-type'], 'application/json; charset=utf-8');
-
-  t.equal(jwt.email, user.email);
-  t.type(jwt.id, 'number');
-  t.type(jwt.iat, 'number');
+  t.equal(jwt.decoded.email, user.email);
+  t.type(jwt.decoded.id, 'number');
+  t.type(jwt.decoded.iat, 'number');
 
   t.teardown(async () => {
     server.close();
@@ -47,7 +31,7 @@ test('should authenticate user and return verified jwt', async t => {
 test('should fail to authenticate user and return error object', async t => {
   const server = build();
 
-  const user = createFakeUserInput();
+  const user = createFakeUser();
 
   await server.inject({
     method: 'POST',
@@ -61,12 +45,10 @@ test('should fail to authenticate user and return error object', async t => {
     payload: { email: user.email, password: 'wrongpassword' },
   });
 
-  const data = response.json();
-
   t.equal(response.statusCode, 401);
   t.equal(response.headers['content-type'], 'application/json; charset=utf-8');
 
-  t.same(data, {
+  t.same(response.json(), {
     statusCode: 401,
     error: 'Unauthorized',
     message: 'password is incorrect',
@@ -77,3 +59,33 @@ test('should fail to authenticate user and return error object', async t => {
     await prisma.user.deleteMany({});
   });
 });
+
+export async function createAndAuthenticateUser(
+  server: FastifyInstance,
+  user: FakeUser = createFakeUser()
+) {
+  await server.inject({
+    method: 'POST',
+    url: '/api/user/register',
+    payload: user,
+  });
+
+  const response = await server.inject({
+    method: 'POST',
+    url: '/api/user/auth',
+    payload: { email: user.email, password: user.password },
+  });
+
+  const data = response.json();
+
+  const decodedJwt = server.jwt.verify<ValidJWT>(data.accessToken);
+
+  return {
+    ...response,
+    user,
+    jwt: {
+      decoded: decodedJwt,
+      token: data.accessToken,
+    },
+  };
+}

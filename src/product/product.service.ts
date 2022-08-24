@@ -20,11 +20,11 @@ const options = {
 };
 
 export const findAllProducts = async () => {
-  const products = prisma.product.findMany(options);
+  const products = await prisma.product.findMany(options);
   return products;
 };
 
 export const createProduct = async (product: ProductInput & { ownerId: number }) => {
-  const products = prisma.product.create({ data: product, ...options });
+  const products = await prisma.product.create({ data: product, ...options });
   return products;
 };

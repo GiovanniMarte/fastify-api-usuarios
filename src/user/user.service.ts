@@ -18,17 +18,17 @@ export const createUser = async (input: UserType) => {
 };
 
 export const findUserByEmail = async (email: string) => {
-  const user = prisma.user.findUnique({ where: { email: email } });
+  const user = await prisma.user.findUnique({ where: { email: email } });
   return user;
 };
 
 export const findAllUsers = async () => {
-  const users = prisma.user.findMany({ select: { id: true, email: true, name: true } });
+  const users = await prisma.user.findMany({ select: { id: true, email: true, name: true } });
   return users;
 };
 
 export const deleteUser = async (id: number) => {
-  const deletedUser = prisma.user.delete({
+  const deletedUser = await prisma.user.delete({
     where: { id: id },
     select: { id: true, email: true, name: true },
   });

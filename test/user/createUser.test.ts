@@ -1,13 +1,12 @@
 import { test } from 'tap';
 import build from '../../src/server';
-import { UserResponse } from '../../src/user/user.schema';
 import prisma from '../../src/utils/prisma';
-import { createFakeUserInput } from '../../src/utils/fakeData';
+import { createFakeUser } from '../../src/utils/fakeData';
 
 test('should create user and return user response', async t => {
   const server = build();
 
-  const user = createFakeUserInput();
+  const user = createFakeUser();
 
   const response = await server.inject({
     method: 'POST',
@@ -15,7 +14,7 @@ test('should create user and return user response', async t => {
     payload: user,
   });
 
-  const data = UserResponse.parse(response.json());
+  const data = response.json();
 
   t.equal(response.statusCode, 201);
   t.equal(response.headers['content-type'], 'application/json; charset=utf-8');
@@ -33,7 +32,7 @@ test('should create user and return user response', async t => {
 test('should return an error object', async t => {
   const server = build();
 
-  const user = createFakeUserInput({ hasEmail: false });
+  const user = createFakeUser({ hasEmail: false });
 
   const response = await server.inject({
     method: 'POST',
@@ -41,14 +40,10 @@ test('should return an error object', async t => {
     payload: user,
   });
 
-  const data = response.json();
-
-  console.log(data);
-
   t.equal(response.statusCode, 400);
   t.equal(response.headers['content-type'], 'application/json; charset=utf-8');
 
-  t.same(data, {
+  t.same(response.json(), {
     statusCode: 400,
     error: 'Bad Request',
     message: "body must have required property 'email'",

@@ -2,8 +2,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { findAllUsers, createUser, deleteUser, findUserByEmail } from './user.service';
 import { LoginType, UserType } from './user.schema';
 import { verifyPassword } from '../utils/hash';
+import { ReplyError } from '../errors/ReplyError';
 
-export const registerUserHandler = async (
+export const createUserHandler = async (
   request: FastifyRequest<{ Body: UserType }>,
   reply: FastifyReply
 ) => {
@@ -25,15 +26,19 @@ export const authUserHandler = async (
 
     const user = await findUserByEmail(email);
 
-    if (!user) return reply.code(401).send({ status: 401, error: 'User not found' });
+    if (!user) {
+      return reply.code(401).send(new ReplyError(401, 'Unauthorized', 'user not found'));
+    }
 
     const isMatch = await verifyPassword(password, user.password);
 
-    if (!isMatch) return reply.code(401).send({ status: 401, error: 'Password not correct' });
+    if (!isMatch) {
+      return reply.code(401).send(new ReplyError(401, 'Unauthorized', 'password is incorrect'));
+    }
 
-    const jwt = await reply.jwtSign({ id: user.id, name: user.name });
+    const jwt = await reply.jwtSign({ id: user.id, email: user.email });
 
-    return reply.code(201).send({ accessToken: jwt });
+    return reply.code(200).send({ accessToken: jwt });
   } catch (err) {
     return reply.code(400).send(err);
   }

@@ -5,7 +5,7 @@ import { authDecorator } from './decorators/auth.decorator';
 import productRoute from './product/product.route';
 import fastifySwagger from '@fastify/swagger';
 import { withRefResolver } from 'fastify-zod';
-import { SWAGGER_CONFIG } from './utils/swagger.config';
+import { SWAGGER_CONFIG } from './utils/swaggerConfig';
 
 const build = () => {
   const server = fastify({ logger: true });

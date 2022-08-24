@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import {
   findAllUsersHandler,
-  registerUserHandler,
+  createUserHandler,
   deleteUserHandler,
   authUserHandler,
 } from './user.controller';
@@ -15,7 +15,7 @@ const userRoute = async (server: FastifyInstance) => {
   server.post(
     '/register',
     { schema: { body: $ref('User'), response: { 201: $ref('UserResponse') } } },
-    registerUserHandler
+    createUserHandler
   );
 
   server.post(

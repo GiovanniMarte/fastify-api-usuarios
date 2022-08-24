@@ -21,7 +21,7 @@ const Login = z.object({
   password: z.string(),
 });
 
-const LoginResponse = z.object({
+export const LoginResponse = z.object({
   accessToken: z.string(),
 });
 

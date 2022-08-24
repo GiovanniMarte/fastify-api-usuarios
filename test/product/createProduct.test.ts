@@ -41,3 +41,31 @@ test('should create product and return product response', async t => {
     await prisma.user.deleteMany({});
   });
 });
+
+test('should fail to add product and return error object', async t => {
+  const server = build();
+
+  const { jwt } = await createAndAuthenticateUser(server);
+
+  const product = createFakeProduct({ hasTitle: false });
+
+  const response = await server.inject({
+    method: 'POST',
+    url: '/api/product',
+    headers: { authorization: `Bearer ${jwt.token}` },
+    payload: product,
+  });
+
+  t.equal(response.statusCode, 400);
+  t.equal(response.headers['content-type'], 'application/json; charset=utf-8');
+
+  t.same(response.json(), {
+    statusCode: 400,
+    error: 'Bad Request',
+    message: "body must have required property 'title'",
+  });
+
+  t.teardown(async () => {
+    await prisma.user.deleteMany({});
+  });
+});

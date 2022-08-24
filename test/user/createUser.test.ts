@@ -29,7 +29,7 @@ test('should create user and return user response', async t => {
   });
 });
 
-test('should return an error object', async t => {
+test('should fail to register and return an error object', async t => {
   const server = build();
 
   const user = createFakeUser({ hasEmail: false });
